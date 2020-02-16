@@ -2,3 +2,9 @@ canvas {
   display: block;
   margin: auto;
 }
+
+#canvas {
+  background: red;
+  height: 600px;
+  width: 800px;
+}

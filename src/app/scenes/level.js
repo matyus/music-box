@@ -14,7 +14,8 @@ let
   scoreText,
   bombs,
   gameOver = false,
-  timeout;
+  timeout,
+  music;
 
 export default class Level extends Scene {
   constructor (data) {
@@ -39,6 +40,8 @@ export default class Level extends Scene {
     this.load.image('bomb', require('../assets/bomb.png'));
 
     this.load.spritesheet('dude', require('../assets/dude.png'), { frameWidth: 32, frameHeight: 48 });
+
+    this.load.audio('why', require('../assets/Why/Note01.wav'));
   }
 
   create () {
@@ -54,6 +57,8 @@ export default class Level extends Scene {
     platforms.create(600, 400, 'ground');
     platforms.create(50, 250, 'ground');
     platforms.create(750, 220, 'ground');
+
+    platforms.rotate(20);
 
     player = this.physics.add.sprite(100, 450, 'dude');
 
@@ -101,6 +106,7 @@ export default class Level extends Scene {
     this.physics.add.collider(bombs, platforms);
     this.physics.add.collider(player, bombs, this.hitBomb, null, this);
 
+    music = this.sound.add('why')
   }
 
   update () {
@@ -151,6 +157,8 @@ export default class Level extends Scene {
     timeout = window.setTimeout(() => {
       this.scene.start('menu', { previousScore: score })
     }, 1000);
+
+    music.play();
 
     return this;
   }

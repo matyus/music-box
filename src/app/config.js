@@ -1,5 +1,1 @@
-export const config = {
-  transparent: true,
-  banner: false,
-  disableContextMenu: true
-};
+export const config = {};
