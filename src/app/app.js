@@ -140,7 +140,7 @@ const addBall = (world, render) => {
 };
 
 export default class App {
-  constructor(config) {
+  constructor() {
     console.log({
       Engine,
       Events,
