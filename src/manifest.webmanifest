@@ -1,0 +1,7 @@
+{
+  "short_name": "foo",
+  "name": "foo bar baz",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "landscape"
+}
