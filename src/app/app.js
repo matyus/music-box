@@ -17,26 +17,17 @@ import { MatterCollisionEvents } from "matter-collision-events";
 
 import { Howl, Howler } from 'howler';
 
-const SCALE = [
-  require('./assets/Why/Note01.wav'),
-  require('./assets/Why/Note02.wav'),
-  require('./assets/Why/Note03.wav'),
-  require('./assets/Why/Note04.wav'),
-  require('./assets/Why/Note05.wav'),
-  require('./assets/Why/Note06.wav'),
-  require('./assets/Why/Note07.wav'),
-  require('./assets/Why/Note08.wav'),
-  require('./assets/Why/Note09.wav'),
-  require('./assets/Why/Note10.wav'),
-  require('./assets/Why/Note11.wav'),
-  require('./assets/Why/Note12.wav')
-];
+//import { SOUNDS } from "./sounds/why.js";
+import { SOUNDS } from "./sounds/super-mario.js";
+//import { SOUNDS } from "./sounds/random.js";
+
 
 // which is was pressed last?
 let key = null;
 
 // store the sounds has a hash map
-let scaleMap = {};
+let soundMap = {};
+let selectedSound = 1;
 
 // store all the objects that the balls will bounce off of
 const obstructions = {};
@@ -44,28 +35,47 @@ const obstructions = {};
 const fountains = {}
 
 // create the hash map of all the sounds
-const buildScaleMap = () => {
+function buildSoundMap(sounds) {
 
   const struct = {};
 
-  SCALE.forEach((file, index) => {
+  sounds.forEach((file, index) => {
     struct[index + 1] = new Howl({ src: [file] })
   });
 
   return struct;
 };
 
-function nextSound(body) {
+function renderSoundSelect(soundMap) {
+  const select = document.createElement("select");
+  select.id = "select-sound";
+  select.addEventListener('change', event => {
+    selectedSound = event.target.selectedOptions[0].value;
+  });
+
+  for (const key in soundMap) {
+    const option = document.createElement("option");
+    option.value = key;
+    option.text = soundMap[key]._src;
+
+    select.add(option);
+  }
+
+  document.body.append(select);
+
+}
+
+function nextSound(body, sound) {
   const currentSound = obstructions[body.id].sound;
 
-  obstructions[body.id].sound = currentSound >= SCALE.length ? 1 : currentSound + 1;
+  obstructions[body.id].sound = sound;
 }
 
 function detectObstructionCreation({ startX, startY, endX, endY }) {
   return !(startX === endX && startY === endY);
 };
 
-function setObstructionSound(body, sound = 1) {
+function setObstructionSound(body, sound = selectedSound) {
   obstructions[body.id] = {
     body,
     sound
@@ -94,15 +104,38 @@ function buildRectangle(world, coords, slope) {
   World.add(world, [ rectangle ]);
 };
 
-function buildFountain(world, render, x = 20, y = 20, key = Object.keys(fountains).length) {
-  fountains[key] = setInterval(addBall, 1000, world, render, { x, y });
-  console.log({ fountains });
+function buildFountain(world, render, x = 20, y = 20, delay, key = Object.keys(fountains).length) {
+  const input = document.createElement('input');
+  input.type = "number";
+  input.value = delay;
+
+  input.addEventListener('keyup', event => {
+    if (event.key === "Enter") {
+      updateFountain(world, render, x, y, event.target.value, key);
+    }
+  });
+
+  fountains[key] = {
+    delay,
+    input,
+    interval: setInterval(addBall, delay, world, render, { x, y }),
+  }
+
+
+  document.body.appendChild(input);
+
+}
+
+function updateFountain(world, render, x, y, delay, key) {
+  clearInterval(fountains[key].interval);
+  fountains[key].input.remove();
+  buildFountain(world, render, x, y, delay, key);
 }
 
 function handleCollide({ bodyA, bodyB }) {
   const obstruction = (bodyA.label === "Rectangle Body") ? bodyA : bodyB
 
-  scaleMap[obstructions[obstruction.id].sound].play();
+  soundMap[obstructions[obstruction.id].sound].play();
 };
 
 
@@ -166,7 +199,8 @@ export default class App {
 
     Matter.use(MatterCollisionEvents);
 
-    scaleMap = buildScaleMap();
+    soundMap = buildSoundMap(SOUNDS);
+    renderSoundSelect(soundMap);
 
     // create engine
     var engine = Engine.create();
@@ -177,7 +211,7 @@ export default class App {
       element: document.body,
       engine: engine,
       options: {
-        width: 800,
+        width: 1000,
         height: 600,
         showAngleIndicator: true,
         showCollisions: true
@@ -191,10 +225,10 @@ export default class App {
     Runner.run(runner, engine);
 
     // drop a ball
-    buildFountain(world, render);
-    buildFountain(world, render, 200, 20);
-    buildFountain(world, render, 400, 20);
-    buildFountain(world, render, 600, 20);
+    buildFountain(world, render, 200, 20, 2000);
+    buildFountain(world, render, 400, 20, 1000);
+    buildFountain(world, render, 600, 20, 500);
+    buildFountain(world, render, 800, 20, 4000);
 
     // add mouse control
     var mouse = Mouse.create(render.canvas);
@@ -243,7 +277,7 @@ export default class App {
             case "Shift":
               destroyObstruction(bodies[0], world);
               break;
-            default: nextSound(bodies[0])
+            default: nextSound(bodies[0], selectedSound)
           }
         }
       }
