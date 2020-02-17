@@ -41,6 +41,8 @@ let scaleMap = {};
 // store all the objects that the balls will bounce off of
 const obstructions = {};
 
+const fountains = {}
+
 // create the hash map of all the sounds
 const buildScaleMap = () => {
 
@@ -92,6 +94,11 @@ function buildRectangle(world, coords, slope) {
   World.add(world, [ rectangle ]);
 };
 
+function buildFountain(world, render, x = 20, y = 20, key = Object.keys(fountains).length) {
+  fountains[key] = setInterval(addBall, 1000, world, render, { x, y });
+  console.log({ fountains });
+}
+
 function handleCollide({ bodyA, bodyB }) {
   const obstruction = (bodyA.label === "Rectangle Body") ? bodyA : bodyB
 
@@ -122,9 +129,9 @@ const getLength = ({ startX, startY, endX, endY }) => {
   return Math.sqrt(a*a + b*b);
 };
 
-const addBall = (world, render) => {
+const addBall = (world, render, config) => {
 
-  const ball = Bodies.circle(200, 20, 10, {
+  const ball = Bodies.circle(config.x, config.y, 10, {
     friction: 0,
     restitution: 1,
     density: 1
@@ -184,7 +191,10 @@ export default class App {
     Runner.run(runner, engine);
 
     // drop a ball
-    setInterval(addBall, 1000, world, render);
+    buildFountain(world, render);
+    buildFountain(world, render, 200, 20);
+    buildFountain(world, render, 400, 20);
+    buildFountain(world, render, 600, 20);
 
     // add mouse control
     var mouse = Mouse.create(render.canvas);
@@ -229,10 +239,11 @@ export default class App {
         const bodies = Query.point(getObstructionBodies(), { x, y });
 
         if (bodies.length > 0) {
-          if (key === "Shift") {
-            destroyObstruction(bodies[0], world)
-          } else {
-            nextSound(bodies[0])
+          switch (key) {
+            case "Shift":
+              destroyObstruction(bodies[0], world);
+              break;
+            default: nextSound(bodies[0])
           }
         }
       }
