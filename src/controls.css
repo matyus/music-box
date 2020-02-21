@@ -1,0 +1,22 @@
+
+select,
+option,
+input,
+label {
+  display: inline-block;
+  font-size: 20px;
+  margin: 10px;
+}
+
+label {
+  display: block;
+}
+
+input {
+  padding: .25em;
+  max-width: 100px;
+}
+
+select {
+  max-width: 600px;
+}

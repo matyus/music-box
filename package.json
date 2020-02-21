@@ -1,0 +1,12 @@
+{
+  "name": "music-box-vanilla",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Michael Matyus <michael@maty.us>",
+  "license": "MIT",
+  "dependencies": {
+    "howler": "^2.1.3",
+    "matter-collision-events": "^0.1.7",
+    "matter-js": "^0.14.2"
+  }
+}
