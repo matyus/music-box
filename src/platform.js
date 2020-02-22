@@ -15,7 +15,13 @@ function handleCollision(pair) {
 }
 
 function createPlatform(world, x, y, angle) {
-  var body = Bodies.rectangle(x, y, 50, 10, { isStatic: true, angle })
+  var body = Bodies.rectangle(x, y, 50, 10, {
+    angle,
+    render: {
+      fillStyle: 'white'
+    },
+    isStatic: true,
+  });
 
   platforms[body.id] = {
     body,
@@ -66,8 +72,8 @@ export function buildPlatformDiagram(world) {
   platformDiagram = Bodies.rectangle(30, 20, 25, 5, {
     isStatic: true,
     render: {
-      strokeStyle: 'red',
-      lineWidth: 2
+      strokeStyle: 'gray',
+      lineWidth: 3
     },
     angle: getRotation()
   })

@@ -10,28 +10,42 @@ body {
   box-sizing: inherit;
 }
 
+h1, h2, h3, h4, h5, h6 {
+ font-size: inherit;
+}
+
 body {
   display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
+  grid-template-columns: 50% auto;
+  grid-template-rows: 600px auto;
+
+  padding: 0;
+  margin: 0;
 }
 
 #root {
+  grid-column: 1 / span 2;
+}
+
+#controls {
+  grid-row-start: 2;
   grid-column-start: 1;
 }
+
+#instructions,
 #controls {
-  grid-row-start: 1;
-  grid-column-start: 3;
+  margin: 0 20px;
 }
+
 #instructions {
   grid-row-start: 2;
-  grid-column-start: 3;
-
-  font-size: 13px;
+  grid-column-start: 2;
 }
+
 #instructions table {
   border: 1px;
   border-collapse: collapse;
-  width: 100%;
+  font-size: 13px;
 }
 
 #instructions th {
@@ -39,6 +53,12 @@ body {
 }
 #instructions td,
 #instructions th {
-  padding: 5px 20px;
+  padding: 10px 20px;
   text-align: left;
+}
+#instructions th:first-child,
+#instructions td:first-child {
+  font-family: monospace;
+  background-color: lightgray;
+  text-align: center;
 }

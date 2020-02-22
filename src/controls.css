@@ -1,19 +1,26 @@
-
 select,
 option,
 input,
 label {
   display: inline-block;
-  font-size: 20px;
   margin: 10px;
 }
 
 label {
-  display: block;
+  display: flex;
+  align-items: center;
+}
+
+option,
+select {
+  font-size: inherit;
 }
 
 input {
   padding: .25em;
+}
+
+input:not([type="range"]) {
   max-width: 100px;
 }
 

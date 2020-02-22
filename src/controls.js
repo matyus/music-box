@@ -5,6 +5,10 @@ import { updatePlatformDiagram } from './platform.js';
 
 let selectedSoundId = 0;
 
+let currentSound = null;
+let currentSoundLabel = null;
+let currentSoundInput = null;
+
 let currentKey = null;
 let currentKeyLabel = null;
 let currentKeyInput = null;
@@ -47,20 +51,26 @@ export function updateCurrentKey(key) {
 
 export function buildControls(element) {
   const soundMap = getSoundMap();
-  const select = document.createElement('select');
 
-  select.id = 'select-sound';
-  select.addEventListener('change', event => { console.log('select');  selectedSoundId = event.target.selectedOptions[0].value });
+  currentSoundLabel = document.createElement('label');
+  currentSoundLabel.innerText = "sound";
+
+  const currentSelectInput = document.createElement('select');
+
+  currentSelectInput.id = 'select-sound';
+  currentSelectInput.addEventListener('change', event => { console.log('select');  selectedSoundId = event.target.selectedOptions[0].value });
 
   for (const key in soundMap) {
     const option = document.createElement('option');
     option.value = key;
     option.text = getSounds()[key].name;
 
-    select.add(option);
+    currentSelectInput.add(option);
   }
 
-  element.append(select);
+  currentSoundLabel.append(currentSelectInput);
+
+  element.append(currentSoundLabel);
 
   currentKeyLabel = document.createElement('label');
   currentKeyLabel.innerText = "current key";
@@ -75,7 +85,7 @@ export function buildControls(element) {
   element.append(currentKeyLabel);
 
   delayLabel = document.createElement('label');
-  delayLabel.innerText = "delay";
+  delayLabel.innerText = "delay (ms)";
 
   delayInput = document.createElement('input');
   delayInput.type = "number";
@@ -87,14 +97,17 @@ export function buildControls(element) {
   element.append(delayLabel);
 
   rotateLabel = document.createElement('label');
-  rotateLabel.innerText = "rotate";
+  rotateLabel.innerText = "rotate (angle)";
 
   rotateInput = document.createElement('input');
-  rotateInput.type = "number";
+  rotateInput.type = "range";
+  rotateInput.min = -1;
+  rotateInput.max = 1;
+  rotateInput.step = 0.01;
   rotateInput.value = getRotation();
-  rotateInput.step = 0.1;
   rotateInput.addEventListener('change', event => {
     rotate = event.target.value
+    console.log(rotate);
     updatePlatformDiagram(rotate);
   });
 

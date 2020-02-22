@@ -21,6 +21,10 @@ export default function Game(element) {
   var render = Render.create({
     element,
     engine,
+    options: {
+      width: window.innerWidth,
+      wireframes: false
+    },
     showDebug: true,
     showVelocity: true,
     showShadows: true,
