@@ -60,5 +60,8 @@ body {
 #instructions td:first-child {
   font-family: monospace;
   background-color: lightgray;
+  font-size: 15px;
+  line-height: 1;
+  padding: 10px;
   text-align: center;
 }
