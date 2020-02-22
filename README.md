@@ -34,5 +34,6 @@ Platform | Refracts balls and can be placed at any **angle**. Plays a **sound** 
 - Remove a **fountain** by clicking `F` on the keyboard and clicking on the **fountain** you want to remove
 - Add a **platform** by clicking `p` on the keyboard and clicking anywhere on the screen
 - Remove a **platform** by clicking `P` on the keyboard and clicking on the **platform** you want to remove
+- Update the **angle** of a **platform** by selecting a new **angle**, pressing `u` on the keyboard, and then clicking on the **platform** you want to update
 - Update the sound of an existing platform by choosing the new **sound** in the dropdown, pressing `s` on the keyboard, and then clicking on the **platform** you want to update
 
