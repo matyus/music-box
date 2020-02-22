@@ -23,6 +23,7 @@ export default function Game(element) {
     engine,
     options: {
       width: window.innerWidth,
+      height: 500,
       wireframes: false
     },
     showDebug: true,
